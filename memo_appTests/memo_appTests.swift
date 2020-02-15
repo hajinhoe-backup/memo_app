@@ -7,12 +7,33 @@
 //
 
 import XCTest
+import RealmSwift
 @testable import memo_app
 
 class memo_appTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        //일단 초기화 박아버리자
+            let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
+
+            let realmURLs = [
+                realmURL,
+                realmURL.appendingPathExtension("lock"),
+                realmURL.appendingPathExtension("note"),
+                realmURL.appendingPathExtension("management")
+
+            ]
+
+            for URL in realmURLs {
+                do {
+                    try FileManager.default.removeItem(at: URL)
+                } catch {
+                    // handle error
+                }
+        }
+    
     }
 
     override func tearDown() {
