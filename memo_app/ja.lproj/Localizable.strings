@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  memo_app
+
+  Created by jinho on 2020/02/16.
+  Copyright © 2020 jinho. All rights reserved.
+*/
+
+"Add" = "追加";
+"Memo List" = "メモリスト";
+"User Memo First Photo Preview" = "ユーザーが最初に追加した写真のプリビュー";
+"Title" = "タイトル";
+"Content" = "内容";
+"Images" = "イメージ";
+"Add image from Camera, Camera roll and Url" = "カメラ、カメラロール、URLからイメージ追加";
+"Added Image" = "追加されたイメージ";
+"Delete" = "消去";
+"Removes Image at Upside" = "上のイメージを消去";
+"There's no title" = "タイトル無し";
+"There's no content" = "内容無し";
+"Writing" = "メモを書く";
+"Memo" = "メモ";
+"Are you really want to delete?" = "永久に削除しますか？";
+"Cancel" = "キャンセル";
+"Camera" = "カメラ";
+"CameraRoll" = "カメラロール";
+"Error" = "エラー";
+"Not a Image" = "イメージではありません";
+"OK" = "了解";
+"Incollect URL" = "正しくないURL";
+"Input URL at bellow text box" = "下にURLを書いてください";
+"Download" = "ダウンロード";
+"Input URL here" = "ここにURLを書いてください";
+"Now processing" = "プロセシング中";

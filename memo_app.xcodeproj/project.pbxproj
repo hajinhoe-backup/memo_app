@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5F54207C23F2691400E69BAA /* MemoHeaderCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */; };
-		5F54207E23F2CA5800E69BAA /* MemoPhotoItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207D23F2CA5800E69BAA /* MemoPhotoItemCellView.swift */; };
-		5F54208023F2F36100E69BAA /* MemoPhotoItemCellWithDeleteButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207F23F2F36100E69BAA /* MemoPhotoItemCellWithDeleteButtonView.swift */; };
+		5F54208023F2F36100E69BAA /* MemoPhotoItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207F23F2F36100E69BAA /* MemoPhotoItemCellView.swift */; };
 		5F58C82A23F6401200E2D3F0 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */; };
-		5F715DBF23F7D83A004ACE93 /* MemoDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F715DBE23F7D83A004ACE93 /* MemoDelete.swift */; };
 		5F89FCAD23F6E45A00997AC6 /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */; };
 		5FAB777123F179810074A866 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB777023F179810074A866 /* AppDelegate.swift */; };
 		5FAB777323F179810074A866 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB777223F179810074A866 /* SceneDelegate.swift */; };
@@ -27,6 +25,8 @@
 		5FAB77AF23F1909A0074A866 /* MemoListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB77AE23F1909A0074A866 /* MemoListCellView.swift */; };
 		5FAB77B123F19FE90074A866 /* MemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB77B023F19FE90074A866 /* MemoListViewController.swift */; };
 		5FAB77B323F19FFD0074A866 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB77B223F19FFD0074A866 /* MemoViewController.swift */; };
+		5FCFCF6623F9269200E06AEF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FCFCF6823F9269200E06AEF /* Localizable.strings */; };
+		5FCFCF6E23F9273A00E06AEF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCFCF6D23F9273A00E06AEF /* StringExtension.swift */; };
 		7E2843569E0ED479C02A22EB /* Pods_memo_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E755DFCA019371B5B32634 /* Pods_memo_app.framework */; };
 		AD62EEC22EA429712D1D8047 /* Pods_memo_appTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4428CAD0973131E816BE9CA1 /* Pods_memo_appTests.framework */; };
 		D61E29BABADB7CEE0F62642B /* Pods_memo_app_memo_appUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A25BAFF6BEF3AEC5988500F /* Pods_memo_app_memo_appUITests.framework */; };
@@ -56,13 +56,11 @@
 		50D34E3F17A51E94487CAA8B /* Pods-memo_app-memo_appUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_app-memo_appUITests.debug.xcconfig"; path = "Target Support Files/Pods-memo_app-memo_appUITests/Pods-memo_app-memo_appUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		58E755DFCA019371B5B32634 /* Pods_memo_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_memo_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoHeaderCellView.swift; sourceTree = "<group>"; };
-		5F54207D23F2CA5800E69BAA /* MemoPhotoItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoPhotoItemCellView.swift; sourceTree = "<group>"; };
-		5F54207F23F2F36100E69BAA /* MemoPhotoItemCellWithDeleteButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoPhotoItemCellWithDeleteButtonView.swift; sourceTree = "<group>"; };
+		5F54207F23F2F36100E69BAA /* MemoPhotoItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoPhotoItemCellView.swift; sourceTree = "<group>"; };
 		5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileManager.swift; sourceTree = "<group>"; };
 		5F715DBC23F7BC21004ACE93 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		5F715DBE23F7D83A004ACE93 /* MemoDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoDelete.swift; sourceTree = "<group>"; };
 		5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
-		5FAB776D23F179810074A866 /* memo_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = memo_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FAB776D23F179810074A866 /* memos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = memos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FAB777023F179810074A866 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5FAB777223F179810074A866 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5FAB777423F179810074A866 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +80,12 @@
 		5FAB77AE23F1909A0074A866 /* MemoListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListCellView.swift; sourceTree = "<group>"; };
 		5FAB77B023F19FE90074A866 /* MemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListViewController.swift; sourceTree = "<group>"; };
 		5FAB77B223F19FFD0074A866 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
+		5FCFCF6723F9269200E06AEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FCFCF6923F926BC00E06AEF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5FCFCF6A23F926BC00E06AEF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FCFCF6B23F926C600E06AEF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5FCFCF6C23F926C600E06AEF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FCFCF6D23F9273A00E06AEF /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6A25BAFF6BEF3AEC5988500F /* Pods_memo_app_memo_appUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_memo_app_memo_appUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E488782DE989CDD837361B6 /* Pods-memo_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_app.debug.xcconfig"; path = "Target Support Files/Pods-memo_app/Pods-memo_app.debug.xcconfig"; sourceTree = "<group>"; };
 		EF27C99E6DA4DC762EF9FB92 /* Pods-memo_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_app.release.xcconfig"; path = "Target Support Files/Pods-memo_app/Pods-memo_app.release.xcconfig"; sourceTree = "<group>"; };
@@ -139,14 +143,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5F715DBD23F7D81D004ACE93 /* ControllerTools */ = {
-			isa = PBXGroup;
-			children = (
-				5F715DBE23F7D83A004ACE93 /* MemoDelete.swift */,
-			);
-			path = ControllerTools;
-			sourceTree = "<group>";
-		};
 		5FAB776423F179810074A866 = {
 			isa = PBXGroup;
 			children = (
@@ -163,7 +159,7 @@
 		5FAB776E23F179810074A866 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5FAB776D23F179810074A866 /* memo_app.app */,
+				5FAB776D23F179810074A866 /* memos.app */,
 				5FAB778323F179840074A866 /* memo_appTests.xctest */,
 				5FAB778E23F179840074A866 /* memo_appUITests.xctest */,
 			);
@@ -173,8 +169,8 @@
 		5FAB776F23F179810074A866 /* memo_app */ = {
 			isa = PBXGroup;
 			children = (
-				5F715DBD23F7D81D004ACE93 /* ControllerTools */,
 				5FAB777023F179810074A866 /* AppDelegate.swift */,
+				5FCFCF6823F9269200E06AEF /* Localizable.strings */,
 				5FAB77A123F180090074A866 /* Models */,
 				5FAB777223F179810074A866 /* SceneDelegate.swift */,
 				5FAB77A223F180170074A866 /* VIews */,
@@ -213,6 +209,7 @@
 				5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */,
 				5FAB77AB23F180830074A866 /* RealmManager.swift */,
 				5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */,
+				5FCFCF6D23F9273A00E06AEF /* StringExtension.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -231,8 +228,7 @@
 			children = (
 				5FAB77AE23F1909A0074A866 /* MemoListCellView.swift */,
 				5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */,
-				5F54207D23F2CA5800E69BAA /* MemoPhotoItemCellView.swift */,
-				5F54207F23F2F36100E69BAA /* MemoPhotoItemCellWithDeleteButtonView.swift */,
+				5F54207F23F2F36100E69BAA /* MemoPhotoItemCellView.swift */,
 			);
 			path = VIews;
 			sourceTree = "<group>";
@@ -265,7 +261,7 @@
 			);
 			name = memo_app;
 			productName = memo_app;
-			productReference = 5FAB776D23F179810074A866 /* memo_app.app */;
+			productReference = 5FAB776D23F179810074A866 /* memos.app */;
 			productType = "com.apple.product-type.application";
 		};
 		5FAB778223F179840074A866 /* memo_appTests */ = {
@@ -337,6 +333,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
+				ja,
 			);
 			mainGroup = 5FAB776423F179810074A866;
 			productRefGroup = 5FAB776E23F179810074A866 /* Products */;
@@ -356,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FAB777D23F179840074A866 /* LaunchScreen.storyboard in Resources */,
+				5FCFCF6623F9269200E06AEF /* Localizable.strings in Resources */,
 				5FAB777A23F179840074A866 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -486,8 +485,9 @@
 			files = (
 				5FAB777523F179810074A866 /* ViewController.swift in Sources */,
 				5FAB777123F179810074A866 /* AppDelegate.swift in Sources */,
+				5FCFCF6E23F9273A00E06AEF /* StringExtension.swift in Sources */,
 				5FAB77B123F19FE90074A866 /* MemoListViewController.swift in Sources */,
-				5F54208023F2F36100E69BAA /* MemoPhotoItemCellWithDeleteButtonView.swift in Sources */,
+				5F54208023F2F36100E69BAA /* MemoPhotoItemCellView.swift in Sources */,
 				5FAB777323F179810074A866 /* SceneDelegate.swift in Sources */,
 				5FAB77AA23F180740074A866 /* HttpManager.swift in Sources */,
 				5F89FCAD23F6E45A00997AC6 /* ColorManager.swift in Sources */,
@@ -496,8 +496,6 @@
 				5FAB77AC23F180830074A866 /* RealmManager.swift in Sources */,
 				5F58C82A23F6401200E2D3F0 /* ImageFileManager.swift in Sources */,
 				5F54207C23F2691400E69BAA /* MemoHeaderCellView.swift in Sources */,
-				5F715DBF23F7D83A004ACE93 /* MemoDelete.swift in Sources */,
-				5F54207E23F2CA5800E69BAA /* MemoPhotoItemCellView.swift in Sources */,
 				5FAB77AF23F1909A0074A866 /* MemoListCellView.swift in Sources */,
 				5FAB77A723F180540074A866 /* Photo.swift in Sources */,
 			);
@@ -539,8 +537,20 @@
 			isa = PBXVariantGroup;
 			children = (
 				5FAB777C23F179840074A866 /* Base */,
+				5FCFCF6923F926BC00E06AEF /* ko */,
+				5FCFCF6B23F926C600E06AEF /* ja */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5FCFCF6823F9269200E06AEF /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FCFCF6723F9269200E06AEF /* en */,
+				5FCFCF6A23F926BC00E06AEF /* ko */,
+				5FCFCF6C23F926C600E06AEF /* ja */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -550,6 +560,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -610,6 +621,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -674,7 +686,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jinho.memo-app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = memos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -694,7 +706,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jinho.memo-app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = memos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -98,6 +98,8 @@ class MemoListCellView: UITableViewCell {
     /* 화면 좌측에 보이는 프리뷰 이미지입니다. */
     let imagePreView: UIImageView = {
        let imageView = UIImageView()
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityLabel = "User Memo First Photo Preview".localized()
         imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10

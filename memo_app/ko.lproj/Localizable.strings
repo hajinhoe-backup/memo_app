@@ -1,0 +1,34 @@
+/*
+  Localizable.strings
+  memo_app
+
+  Created by jinho on 2020/02/16.
+  Copyright © 2020 jinho. All rights reserved.
+*/
+
+"Add" = "추가";
+"Memo List" = "메모 리스트";
+"User Memo First Photo Preview" = "사용자가 처음 추가한 사진의 미리보기";
+"Title" = "제목";
+"Content" = "내용";
+"Images" = "이미지";
+"Add image from Camera, Camera roll and Url" = "카메라, 카메라롤, URL에서 이미지를 추가";
+"Added Image" = "추가된 이미지";
+"Delete" = "지우기";
+"Removes Image at Upside" = "위의 이미지 지우기";
+"There's no title" = "제목 없음";
+"There's no content" = "내용 없음";
+"Writing" = "글 쓰기";
+"Memo" = "메모";
+"Are you really want to delete?" = "정말로 지울까요?";
+"Cancel" = "취소";
+"Camera" = "카메라";
+"CameraRoll" = "카메라롤";
+"Error" = "에러";
+"Not a Image" = "이미지 아님";
+"OK" = "확인";
+"Incollect URL" = "올바르지 않은 URL";
+"Input URL at bellow text box" = "아래에 URL를 넣으세요";
+"Download" = "내려받기";
+"Input URL here" = "여기에 URL을 넣으세요";
+"Now processing" = "작업하는 중";

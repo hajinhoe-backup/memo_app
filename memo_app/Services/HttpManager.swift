@@ -9,33 +9,29 @@
 import Foundation
 import UIKit
 
-class HTTPRequester {
-    class func get(urlComponents: URLComponents,  completion: @escaping(Data?) -> ()) {
-        guard let url = urlComponents.url else {
-            print("Error : can not make url)")
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        
-        let session = URLSession(configuration: .default)
-        
-        let dataTask = session.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                print("Error : \(String(describing: error))")
+class HttpManager {
+    /* URL로 부터 이미지를 얻어옵니다. 요청에 실패하거나, 이미지가 아닌 경우 nil을 반환합니다. */
+    func getImage(from url: URL, complition: @escaping(UIImage?) -> ()) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+            else {
+                complition(nil)
                 return
             }
-
-            if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
-                //complete request. return json data.
-                print("첫번째 성공")
-                completion(data)
-            }
+            complition(image)
+        }.resume()
+    }
+    
+    /* String을 URL로 변환하여 리턴합니다. nil이 될 수 있습니다. (실패) */
+    func stringToUrl(from link: String) -> URL? {
+        if let url = URL(string: link) {
+            return url
+        } else {
+            return nil
         }
-        
-        if dataTask.state == .running {
-            print("im running")
-        }
-        dataTask.resume()
     }
 }

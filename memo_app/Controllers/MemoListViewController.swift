@@ -5,12 +5,17 @@
 //  Created by jinho on 2020/02/10.
 //  Copyright © 2020 jinho. All rights reserved.
 //
+/*
+ 제일 처음 보여지게 되는 메모의 리스트 뷰입니다.
+ */
 
 import Foundation
 import RealmSwift
 import UIKit
 
 class MemoListViewController: UITableViewController {
+    let imageFileManager = ImageFileManager()
+    
     var memos: [Memo] = []
     let memoViewController: MemoViewContoller = {
         let layout = UICollectionViewFlowLayout()
@@ -33,7 +38,7 @@ class MemoListViewController: UITableViewController {
         self.tableView.delegate = self
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(moveMemoWriteView))
-        navigationItem.title = "Memo List"
+        navigationItem.title = "Memo List".localized()
         
     }
     
@@ -62,10 +67,21 @@ class MemoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // register 된 셀이므로 형변환에 실패하지 않습니다. (맞나?)ㅇㅇㅁㄴㅇ오노 수정필요
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MemoListCellView
-        cell.cellTitleView.text = memos[indexPath.item].title
-        cell.cellContentPreviewView.text = memos[indexPath.item].content
+        
+        if memos[indexPath.item].title != "" {
+            cell.cellTitleView.text = memos[indexPath.item].title
+        } else {
+            cell.cellTitleView.text = "There's no title".localized()
+        }
+        
+        if memos[indexPath.item].content != "" {
+            cell.cellContentPreviewView.text = memos[indexPath.item].content
+        } else {
+            cell.cellContentPreviewView.text = "There's no content".localized()
+        }
+        
         if let imageUrl = memos[indexPath.item].photos.first?.url {
-            cell.imagePreView.image = ImageFileManager.getSavedImage(named: imageUrl)
+            cell.imagePreView.image = imageFileManager.getSavedImage(named: imageUrl)
             cell.imagePreView.isHidden = false
         } else {
             cell.imagePreView.isHidden = true
@@ -103,7 +119,7 @@ class MemoListViewController: UITableViewController {
     func deleteMemo(indexPath: IndexPath) {
         print("지웁니다?")
         for photo in memos[indexPath.item].photos {
-            ImageFileManager.deleteImage(imageName: photo.url)
+            imageFileManager.deleteImage(imageName: photo.url)
         }
         
         RealmManager.write(realm: RealmManager.realm) {

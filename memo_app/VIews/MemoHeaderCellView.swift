@@ -8,6 +8,7 @@
 
 import UIKit
 
+/* 메모 쓰기 및 보기 화면에서 보이는 제목 상자, 글 상자, 이미지 셀 헤더 부분이 포함됩니다. */
 class MemoHeaderCellView: UICollectionReusableView {
     /* 레이아웃 상 최상위 스택 뷰 정의 및 설정 */
     let verticalStackView: UIStackView = {
@@ -41,7 +42,7 @@ class MemoHeaderCellView: UICollectionReusableView {
     /* 스텍 뷰 하위의 타이틀 쓰는 곳 정의 및 설정 */
     let titleLabel: UILabel = {
        let titleLabel = UILabel()
-        titleLabel.text = "Title"
+        titleLabel.text = "Title".localized()
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         titleLabel.textColor = .gray
         return titleLabel
@@ -51,7 +52,7 @@ class MemoHeaderCellView: UICollectionReusableView {
         let titleView = UITextView()
         titleView.font = UIFont.boldSystemFont(ofSize: 24)
         titleView.isScrollEnabled = false
-        titleView.backgroundColor = UIColor(red: CGFloat(242)/CGFloat(255), green: CGFloat(242)/CGFloat(255), blue: CGFloat(247)/CGFloat(255), alpha: 1) // iOS13+에서 .systemgray6 지원
+        titleView.backgroundColor = ColorManager.sysgray6 // iOS13+에서 .systemgray6 지원
         titleView.layer.cornerRadius = 10
         titleView.clipsToBounds = true
         titleView.tag = 0
@@ -66,7 +67,7 @@ class MemoHeaderCellView: UICollectionReusableView {
     /* 본문 란 정의 및 설정 */
     let textLabel: UILabel = {
         let label = UILabel()
-        label.text = "Content"
+        label.text = "Content".localized()
         label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 16)
         return label
@@ -76,7 +77,7 @@ class MemoHeaderCellView: UICollectionReusableView {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.isScrollEnabled = false
-        textView.backgroundColor = UIColor(red: CGFloat(242)/CGFloat(255), green: CGFloat(242)/CGFloat(255), blue: CGFloat(247)/CGFloat(255), alpha: 1) // iOS13+에서 .systemgray6 지원
+        textView.backgroundColor = ColorManager.sysgray6 // iOS13+에서 .systemgray6 지원
         textView.layer.cornerRadius = 10
         textView.clipsToBounds = true
         textView.tag = 1
@@ -109,7 +110,7 @@ class MemoHeaderCellView: UICollectionReusableView {
     
     let imageCollectionBarHeader: UILabel = {
         let label = UILabel()
-        label.text = "Images"
+        label.text = "Images".localized()
         label.font = UIFont.systemFont(ofSize: 18)
         return label
     }()
@@ -119,7 +120,9 @@ class MemoHeaderCellView: UICollectionReusableView {
         button.backgroundColor = .orange
         button.layer.cornerRadius = 10
         button.clipsToBounds = true
-        button.setTitle("Add", for: .normal)
+        button.setTitle("Add".localized(), for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityHint = "Add image from Camera, Camera roll and Url".localized()
         return button
     }()
     
