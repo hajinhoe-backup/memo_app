@@ -15,58 +15,108 @@ class memo_appTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
-        //일단 초기화 박아버리자
-            let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
-
-            let realmURLs = [
-                realmURL,
-                realmURL.appendingPathExtension("lock"),
-                realmURL.appendingPathExtension("note"),
-                realmURL.appendingPathExtension("management")
-
-            ]
-
-            for URL in realmURLs {
-                do {
-                    try FileManager.default.removeItem(at: URL)
-                } catch {
-                    // handle error
-                }
+        // 데이터 저장 폴더 초기화
+        let fileManager = ImageFileManager()
+        do {
+            try fileManager.clearDirectory(directory: .original)
+            try fileManager.clearDirectory(directory: .originalTemporary)
+            try fileManager.clearDirectory(directory: .thumbnail)
+        } catch {
+            print("폴더 초기화 중 에러 발생!")
+            print(error)
         }
-    
+        // 테스트 전 데이터 베이스를 초기화합니다.
+        RealmManager.initRealm()
     }
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        // 데이터 저장 폴더 초기화
+        let fileManager = ImageFileManager()
+        do {
+            try fileManager.clearDirectory(directory: .original)
+            try fileManager.clearDirectory(directory: .originalTemporary)
+            try fileManager.clearDirectory(directory: .thumbnail)
+        } catch {
+            print("폴더 초기화 중 에러 발생!")
+            print(error)
+        }
+        
+        RealmManager.initRealm()
     }
-    /* isSaveFunctionWorksProperly? */
-    /* 시나리오 1
-     사진을 100장 첨부합니다.
-     바로 저장 버튼을 클립합니다.
-     오류가 나는지 살펴봅니다.*/
-    /* 시나리오 2
-     사진을 20장 지웁니다.
-     바로 저장 버튼을 클릭합니다.
-     오류가 나는지 살펴봅니다.*/
-    /* 시나리오 3
-     사진 10장 추가 5장 지움 20장 추가 10장 지움
-     저장합니다.
-     오류가 나는지 살펴봅니다.*/
+
+    func testDownloadImage() {
+        // HTTP 매니저의 다운로드 기능을 테스트합니다.
+        
+    }
+    
+    /* Photo 50개를 한 번에 저장하는 테스트입니다. */
+    func testPhotoSave50atOnece() {
+        clean()
+        let controller = MemoViewContoller(collectionViewLayout: .init())
+        
+        controller.isEditing = true
+        controller.isFirstWrite = true
+        controller.initializeView()
+        
+        for _ in (0..<50) {
+            controller.savePhotoTemporary(image: UIImage(imageLiteralResourceName: "broken"))
+        }
+        controller.savePhotosPermanently()
+        
+        print("------test result-------")
+        print(controller.photos)
+        
+        XCTAssert(controller.photos.count == 50)
+    }
+    
+    /* Photo를 한 번에 한 개씩 총 50개 저장하는 테스트입니다. */
+    func testPhotoSave50saveatmost1() {
+        clean()
+        let controller = MemoViewContoller(collectionViewLayout: .init())
+        
+        controller.isEditing = true
+        controller.isFirstWrite = true
+        controller.initializeView()
+        
+        controller.saveMemo()
+        
+        for _ in (0..<50) {
+            controller.editMemo() /* savePhoto가 db의 정보를 활용해서 매번 저장해줘야할 필요 있음 */
+            controller.savePhotoTemporary(image: UIImage(imageLiteralResourceName: "testimage"))
+            controller.savePhotosPermanently()
+        }
+        
+        print("------test result-------")
+        print(controller.photos)
+        
+        XCTAssert(controller.photos.count == 50)
+    }
+    
+    /* 메모 저장 기능을 테스트 합니다. */
+    func testSaveMemo() {
+        let controller = MemoViewContoller(collectionViewLayout: .init())
+        
+        controller.isEditing = true
+        controller.isFirstWrite = true
+        controller.initializeView()
+        
+        for _ in (0..<50) {
+            controller.savePhotoTemporary(image: UIImage(imageLiteralResourceName: "testimage"))
+        }
+        
+        controller.saveMemo()
+        controller.savePhotosPermanently()
+        
+        print("------test result-------")
+        print(controller.memo)
+        
+        XCTAssert(controller.memo.id != -1 && controller.photos.count == 50)
+    }
     
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        
-        let fileManager = FileManager.default
-        do {
-            let documentDirectoryURL = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentDirectoryURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
-            for url in fileURLs {
-               try print(url)
-            }
-        } catch {
-            print(error)
-        }
     }
 
     func testPerformanceExample() {
@@ -74,6 +124,40 @@ class memo_appTests: XCTestCase {
         self.measure {
             // Put the code you want to measure the time of here.
         }
+    }
+    
+    func testFileManagerClean(){
+        let fileManager = ImageFileManager()
+        do {
+            try fileManager.clearDirectory(directory: .original)
+        } catch {
+            print("폴더 초기화 중 에러 발생!")
+            print(error)
+        }
+        
+        guard let originalTemporaryImageDirectory = try? fileManager.getDirectoryURL(directory: .original) else {
+                return
+            }
+        
+        let fileUrls = try? FileManager.default.contentsOfDirectory(at: originalTemporaryImageDirectory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
+        
+        print("------test result-------")
+        XCTAssert(fileUrls!.count == 0)
+    }
+    
+    func clean() {
+        // 데이터 저장 폴더 초기화
+        let fileManager = ImageFileManager()
+        do {
+            try fileManager.clearDirectory(directory: .original)
+            try fileManager.clearDirectory(directory: .originalTemporary)
+            try fileManager.clearDirectory(directory: .thumbnail)
+        } catch {
+            print("폴더 초기화 중 에러 발생!")
+            print(error)
+        }
+        // 테스트 전 데이터 베이스를 초기화합니다.
+        RealmManager.initRealm()
     }
 
 }

@@ -16,7 +16,7 @@ class PhotoViewerViewController: UICollectionViewController {
     
     var photoOffset = IndexPath()
     
-     let imageFileManager = ImageFileManager()
+    let imageFileManager = ImageFileManager()
     
     func getPhotoViewerViewCache(indexPath: IndexPath) -> UIImage? {
         if indexPath.item < photos.count { // 영원하게 저장되어 있는 경우
@@ -26,10 +26,19 @@ class PhotoViewerViewController: UICollectionViewController {
                 return cachedImage
             }
             
+            // 캐시되어 있지 않은 경우 이미지를 가져온다.
+            // 크기가 작은 썸네일을 먼저 가져온다.
             let url = photos[indexPath.item].url
-            if let cachedImage = self.imageFileManager.getSavedImage(named: url, directory: .original) {
+            if let cachedImage = self.imageFileManager.getSavedImage(named: url, directory: .thumbnail) {
                 DispatchQueue.global().async {
-                    self.cachedImages.setObject(cachedImage, forKey: idValue as NSString)
+                    //고화질 이미지를 가져온다.
+                    if let originalImage = self.imageFileManager.getSavedImage(named: url, directory: .original) {
+                        self.cachedImages.setObject(originalImage, forKey: idValue as NSString)
+                        DispatchQueue.main.async {
+                            //고화질 이미지를 가져온 후 업데이트 한다.
+                            self.collectionView.reloadData()
+                        }
+                    }
                 }
                 return cachedImage
             }
@@ -52,14 +61,14 @@ class PhotoViewerViewController: UICollectionViewController {
         collectionView.register(PhotoViewerCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.isPagingEnabled = true
     }
-        
+    
     override func viewDidLoad() { // 객체가 메모리에 올라간 다음에 , 뷰 디드 로이드가 된다음에 창이 보인다.
         super.viewDidLoad()
         
         self.view.backgroundColor = .black
         
         //상단 바
-        self.title = "Viewer"
+        self.title = "Viewer".localized()
         
         if #available(iOS 11.0, *) {
             self.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -72,39 +81,35 @@ class PhotoViewerViewController: UICollectionViewController {
         setupCollectionView()
         
         automaticallyAdjustsScrollViewInsets = false
-        //collectionView.reloadData()
-        
-        
     }
     
-        
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.hidesBarsOnTap = true //allow hiding bar
         collectionView.reloadData()
-        collectionView.scrollToItem(at: photoOffset, at: .left , animated: false)//아이템이 보이는 위치까지 스크롤 해준다 (아마 viwer끝나고, viewlist로 돌아갈 떄도 처리해줘야할듯)
+        collectionView.scrollToItem(at: photoOffset, at: .left , animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.hidesBarsOnTap = false
     }
-
+    
     override var prefersStatusBarHidden: Bool {
         return navigationController?.isNavigationBarHidden == true
     }
-
-        
+    
+    
     @objc func dismissView() {
         navigationController?.popViewController(animated: true)
         self.navigationController?.hidesBarsOnTap = false //allow hiding bar
     }
 }
-    
+
 
 extension PhotoViewerViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(photos.count)
         return photos.count
     }
     

@@ -31,13 +31,6 @@ class MemoListViewController: UITableViewController {
         return viewController
     }()
     
-    /* 세팅 페이지를 생성합니다. 재활용됩니다. */
-    /* 세팅의 경우 접근 횟수가 적으므로 lazy 하게 생성합니다. */
-    lazy var settingViewController: SettingViewController = {
-        let controller = SettingViewController(style: .grouped)
-        return controller
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -57,17 +50,6 @@ class MemoListViewController: UITableViewController {
         
         navigationItem.title = "Memo List".localized()
         
-    }
-    
-    @objc func changeListEditMode() {
-        tableView.isEditing = !tableView.isEditing
-        
-        if tableView.isEditing {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(changeListEditMode))
-        } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(changeListEditMode))
-        }
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -154,6 +136,18 @@ class MemoListViewController: UITableViewController {
 }
 
 extension MemoListViewController {
+    /* Edit 버튼의 작동 메소드입니다. 버튼의 모양과 리스트 뷰에 삭제 버튼 변화 여뷰를 바꿔줍니다. */
+    @objc func changeListEditMode() {
+        tableView.isEditing = !tableView.isEditing
+        
+        if tableView.isEditing {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(changeListEditMode))
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(changeListEditMode))
+        }
+
+    }
+    
     /* 좌로 슬라이드 했을 때, 메모를 지우는 메소드 입니다.
      데이터베이스에서 메모와 사진, 그리고 사진의 파일을 지웁니다. */
     func deleteMemo(indexPath: IndexPath) {
@@ -192,9 +186,5 @@ extension MemoListViewController {
         memoViewController.setToFirstWriteMode()
         memoViewController.memo = Memo()
         navigationController?.pushViewController(memoViewController, animated: true)
-    }
-    
-    @objc func presentSettingView() {
-        navigationController?.pushViewController(self.settingViewController, animated: true)
     }
 }

@@ -13,6 +13,12 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
      viewWillApear의 동작을 또 다시 하지 않게 하기 위한 변수입니다. */
     var needInitialize = true
     
+    /* 포토 뷰어 정의*/
+    /* 사용되지 않을 수 있어 lazy 생성 */
+    lazy var photoViewerViewController = {
+        return PhotoViewerViewController(collectionViewLayout: UICollectionViewFlowLayout())
+    }()
+    
     /* 이미지 피커 정의 */
     var imagePicker = UIImagePickerController()
     
@@ -146,7 +152,6 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
         if #available(iOS 11.0, *) {
         } else {
             if let offset = headerYoffset {
-                print("올라감")
                 collectionView.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
             }
         }
@@ -162,7 +167,6 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
         // iOS 11 이상
         if #available(iOS 11.0, *) {
             if let offset = headerYoffset {
-                print("올라감")
                 collectionView.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
             }
         }
@@ -193,7 +197,6 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
             } catch {
                 print(error)
             }
-            print("클리어 완료")
         }
         
         // 재 사용을 위한 데이터 제거
@@ -213,7 +216,6 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
         if isMovingFromParent {
             clearViewData()
             needInitialize = true
-            print("되돌아가기 작업 완료")
         }
     }
     
@@ -316,13 +318,9 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !enableWriteLayout {
-            let cv = PhotoViewerViewController(collectionViewLayout: UICollectionViewFlowLayout())
-            
-            cv.photos = photos
-            
-            cv.photoOffset = indexPath
-            
-            navigationController?.pushViewController(cv, animated: true)
+            photoViewerViewController.photos = photos
+            photoViewerViewController.photoOffset = indexPath
+            navigationController?.pushViewController(photoViewerViewController, animated: true)
         }
     }
 }
@@ -488,7 +486,10 @@ extension MemoViewContoller {
             let alert = self.showWatingAlert(title: "Deleting".localized(), height: 100)
             self.deleteMemo()
             // 저장이 끝나 알럿을 지웁니다.
-            alert.dismiss(animated: true, completion: nil)
+            alert.dismiss(animated: true, completion: {
+                //리스트로 이동합니다.
+                self.dismissView()
+            })
         })
         let cancelAcion = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil)
         
@@ -568,7 +569,6 @@ extension MemoViewContoller {
     /* 오리지날 이미지는 메모리에 올리기엔 너무 클 수 있으므로,
      temporary filefh 먼저 영구 저장한 다음 처리합니다.*/
     func savePhotoTemporary(image: UIImage) {
-        print("호출3")
         photos.append(Photo())
         
         let index = (imagesIndex.last ?? -1) + 1
@@ -583,7 +583,6 @@ extension MemoViewContoller {
             } catch {
                 print(error)
             }
-            print(index, "오리지날 저장완료!")
         }
         
         let idValue = String(savedPhotoIdMax + 1 + index)
@@ -656,14 +655,10 @@ extension MemoViewContoller {
         thumbnailImageSaveQueue.sync { } // 이미지 리사이징이 끝날 때 까지 대기합니다.
         originalImageSaveQueue.sync { } // 오리지날 이미지 저장이 끝날 때 까지 대기합니다.
         
-        print("리사이즈도 오리지날도 다됐음")
-        
         while temporaryCount < photos.count || permanentlyCount < memo.photos.count {
             if temporaryCount == photos.count {
                 // 뒤에 있는 이미지를 모두 지웁니다.
-                print("뒤를 모조리 지울 것임!")
                 let deleteAmount = memo.photos.count - permanentlyCount
-                print("ooooaaaaaa", deleteAmount)
                 for _ in (0..<deleteAmount) {
                     let imageUrl = memo.photos[memo.photos.count - 1].url
                     RealmManager.write(realm: RealmManager.realm) {
@@ -681,7 +676,6 @@ extension MemoViewContoller {
             }
             if permanentlyCount == memo.photos.count || photos[temporaryCount].id == -1 {
                 // 뒤에 있는 이미지를 모조리 추가합니다.
-                print("뒤에 모조리 추가할 것임!")
                 let baseId = (RealmManager.realm.objects(Photo.self).max(ofProperty: "id") as Int? ?? -1) + 1 - temporaryCount
                 
                 while temporaryCount < photos.count {
@@ -692,8 +686,6 @@ extension MemoViewContoller {
                         memo.photos.append(photos[temporaryCount])
                     }
                     
-                    print(RealmManager.realm.objects(Photo.self))
-                    
                     if let image = self.thumbnailTemporaryImages[imagesIndex[temporaryCount - self.savedPhotoCount]] {
                         do {
                             //썸네일을 저장합니다.
@@ -703,7 +695,6 @@ extension MemoViewContoller {
                             // 임시 저장 오리지날 이미지를 영구저장 폴더로 옮깁니다.
                             try self.imageFileManager.moveFromTo(from: .originalTemporary, fromImageName: String(imagesIndex[temporaryCount - self.savedPhotoCount]), to: .original, toImageName: photos[temporaryCount].url)
                         } catch {
-                            print("왜안돼져")
                             print(error)
                         }
                     }
@@ -714,12 +705,10 @@ extension MemoViewContoller {
             }
             
             if photos[temporaryCount].id == memo.photos[permanentlyCount].id {
-                print("동일한 데이터임!")
                 temporaryCount += 1
                 permanentlyCount += 1
             } else if photos[temporaryCount].id > memo.photos[permanentlyCount].id {
                 // 이미지를 지워야 합니다.
-                print("이미지를 제거해야함!")
                 let imageUrl = memo.photos[permanentlyCount].url
                 RealmManager.write(realm: RealmManager.realm) {
                     RealmManager.realm.delete(memo.photos.filter("id == %@", memo.photos[permanentlyCount].id))
@@ -735,8 +724,6 @@ extension MemoViewContoller {
                 print("Error occurd reflecting Photo!")
             }
         }
-        
-        print("완료!")
         
         // 저장 완료 후, 임시 디렉토리 클리어 작업 및 인덱스 조정 등을 실시합니다.
         do {
@@ -775,16 +762,12 @@ extension MemoViewContoller {
  다운로드 동작과 관련되어 있습니다.*/
 extension MemoViewContoller {
     func saveDownloadedImage(downloadedImage: UIImage?) {
-        print("호출2")
         //이미지가 잘 못 되었을 경우 알려주고 종료
         //이미지가 정상일 경우 저장
         if let image = downloadedImage {
-            print("??여기?")
             savePhotoTemporary(image: image)
         } else {
-            print("여기는요?")
             DispatchQueue.main.async {
-                print("여기까진 돼죠?")
                 let alert = UIAlertController(title: "Error".localized(), message: "Not a Image".localized(), preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "OK".localized(), style: .cancel, handler: nil)
                 
@@ -796,11 +779,9 @@ extension MemoViewContoller {
     }
     
     func downloadFromUrl(userUrl: String?) {
-        print("호출1")
         //url 변환 및 url이 잘 못 되었을 경우 알려주고 종료
         guard let string = userUrl, let url = httpManager.stringToUrl(from: string) else {
             DispatchQueue.main.async {
-                print("얼렛얼렛")
                 let alert = UIAlertController(title: "Error".localized(), message: "Incollect URL".localized(), preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "OK".localized(), style: .cancel, handler: nil)
                 
@@ -825,7 +806,6 @@ extension MemoViewContoller {
                     if error.code == NSURLErrorCancelled {
                         return
                     }
-                    print("에러인지?")
                 }
                 // 완료된 작업
                 DispatchQueue.main.async {
@@ -924,7 +904,7 @@ extension MemoViewContoller {
     @objc func showInfo() {
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let message = "Created".localized() + ": " + dateFormater.string(from: memo.createDate) + "\n" + "Updated".localized() + ": " + dateFormater.string(from: memo.editDate) + "\n" + "Nomber of Photo".localized() + ": " + String(memo.photos.count)
+        let message = "\("Created".localized()): \(dateFormater.string(from: memo.createDate))\n\("Updated".localized()): \(dateFormater.string(from: memo.editDate))\n\("Nomber of Photo".localized()): \(memo.photos.count)"
         let alert = UIAlertController(title: "Info".localized(), message: message, preferredStyle: .alert)
         let conformButton = UIAlertAction(title: "OK".localized(), style: .default, handler: nil)
         

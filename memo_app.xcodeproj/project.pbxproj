@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F3B246523FD28460054CB9F /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3B246423FD28460054CB9F /* SettingViewController.swift */; };
 		5F4A3E6823FE5897006CF021 /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4A3E6723FE5897006CF021 /* PhotoViewerViewController.swift */; };
 		5F4A3E6A23FE59AA006CF021 /* PhotoViewerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4A3E6923FE59AA006CF021 /* PhotoViewerCell.swift */; };
 		5F54207C23F2691400E69BAA /* MemoHeaderCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */; };
@@ -59,7 +58,6 @@
 		4F089462C4B3F5192928C351 /* Pods-memo_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_appTests.debug.xcconfig"; path = "Target Support Files/Pods-memo_appTests/Pods-memo_appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		50D34E3F17A51E94487CAA8B /* Pods-memo_app-memo_appUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_app-memo_appUITests.debug.xcconfig"; path = "Target Support Files/Pods-memo_app-memo_appUITests/Pods-memo_app-memo_appUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		58E755DFCA019371B5B32634 /* Pods_memo_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_memo_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5F3B246423FD28460054CB9F /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		5F4A3E6723FE5897006CF021 /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
 		5F4A3E6923FE59AA006CF021 /* PhotoViewerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerCell.swift; sourceTree = "<group>"; };
 		5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoHeaderCellView.swift; sourceTree = "<group>"; };
@@ -251,7 +249,6 @@
 				5FAB77B023F19FE90074A866 /* MemoListViewController.swift */,
 				5FAB77B223F19FFD0074A866 /* MemoViewController.swift */,
 				5F4A3E6723FE5897006CF021 /* PhotoViewerViewController.swift */,
-				5F3B246423FD28460054CB9F /* SettingViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -500,7 +497,6 @@
 				5FAB777523F179810074A866 /* ViewController.swift in Sources */,
 				5FAB777123F179810074A866 /* AppDelegate.swift in Sources */,
 				5FCFCF6E23F9273A00E06AEF /* StringExtension.swift in Sources */,
-				5F3B246523FD28460054CB9F /* SettingViewController.swift in Sources */,
 				5FAB77B123F19FE90074A866 /* MemoListViewController.swift in Sources */,
 				5F54208023F2F36100E69BAA /* MemoPhotoItemCellView.swift in Sources */,
 				5FAB777323F179810074A866 /* SceneDelegate.swift in Sources */,

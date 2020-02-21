@@ -8,6 +8,7 @@
 
 import UIKit
 
+/* 포토 뷰어의 셀 입니다. */
 class PhotoViewerCell: UICollectionViewCell, UIScrollViewDelegate {
     let imageView = UIImageView()
     let imageScrollView = UIScrollView()
@@ -30,37 +31,23 @@ class PhotoViewerCell: UICollectionViewCell, UIScrollViewDelegate {
         setupImageView()
     }
     
-         
-    
-    //음 동작이 좀 아쉽긴한데 되긴되네.
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         self.addSubview(self.imageScrollView)
         setupImageScrollView()
-
-        
     }
     
     override func layoutSubviews() { // 하위뷰의 레이아웃을 재정의
-        //원래 쓰면 안됨. 고쳐야함.
         super.layoutSubviews()
-        print(self.bounds)
         self.imageScrollView.frame = self.bounds
         self.imageView.frame = self.bounds
-        //self.frame = CGRect(origin: CGPoint(x: self.frame.origin.x, y: 0), size: CGSize(width: 375.0, height: 600.0))
-        
-        //print(self.imageScrollView.bounds)
-        ////print(self.imageScrollView.frame)
-//print(self.imageView.bounds)
-        //print(self.imageView.frame)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         self.imageScrollView.setZoomScale(1, animated: true)
     }
-    
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.imageView

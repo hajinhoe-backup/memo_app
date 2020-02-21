@@ -33,7 +33,6 @@ class MemoHeaderCellView: UICollectionReusableView {
         verticalStackView.addArrangedSubview(textLabel)
         verticalStackView.addArrangedSubview(textView)
         
-        
         verticalStackView.addArrangedSubview(imageCollectionBar)
         setupImageCollectionBar(imageCollectionBar)
         
@@ -134,7 +133,6 @@ class MemoHeaderCellView: UICollectionReusableView {
         let heightConstraint = button.heightAnchor.constraint(equalToConstant: 40)
         heightConstraint.isActive = true
     }
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
