@@ -157,6 +157,19 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if isMovingFromParent {
+            clearViewData()
+            needInitialize = true
+        }
+    }
+    
     func initializeView() {
         collectionView.reloadData() // 데이터 소거 후, 리로드 하지 않으면 iOS10에서 호환성 문제 발생함.\
         
@@ -206,20 +219,6 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
         imagesIndex.removeAll()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if isMovingFromParent {
-            clearViewData()
-            needInitialize = true
-        }
-    }
-    
-    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -257,11 +256,15 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
             /* 헤더 뷰의 컨텐츠가 레이아웃 모드를 따라갈 수 있도록 합니다. */
             if enableWriteLayout {
                 headerView.textView.isEditable = true
+                headerView.textView.accessibilityLabel = "Editable Text Input Form".localized()
                 headerView.titleView.isEditable = true
+                headerView.titleView.accessibilityLabel = "Editable Title Input Form".localized()
                 headerView.imageCollectionBarAddButton.isHidden = false
             } else if (!isFirstWrite && !enableWriteLayout) {
                 headerView.textView.isEditable = false
+                headerView.textView.accessibilityLabel = "Text Content".localized()
                 headerView.titleView.isEditable = false
+                headerView.titleView.accessibilityLabel = "Title".localized()
                 headerView.imageCollectionBarAddButton.isHidden = true
             }
             headerView.imageCollectionBarAddButton.addTarget(self, action: #selector(imageAddButtonActionSheet) , for: .touchUpInside)
@@ -416,7 +419,9 @@ extension MemoViewContoller {
         //실행 후 버튼을 통했을 때의 변화를 제어합니다.
         if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: [0, 0]) as? MemoHeaderCellView {
             headerView.textView.isEditable = true
+            headerView.textView.accessibilityLabel = "Editable Text Input Form".localized()
             headerView.titleView.isEditable = true
+            headerView.titleView.accessibilityLabel = "Editable Title Input Form".localized()
             headerView.imageCollectionBarAddButton.isHidden = false
             headerView.layoutSubviews()
             headerView.layoutSublayers(of: .init())
@@ -433,7 +438,9 @@ extension MemoViewContoller {
         //실행 후 버튼을 통했을 때의 변화를 제어합니다.
         if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: [0, 0]) as? MemoHeaderCellView {
             headerView.textView.isEditable = false
+            headerView.textView.accessibilityLabel = "Text Content".localized()
             headerView.titleView.isEditable = false
+            headerView.titleView.accessibilityLabel = "Title".localized()
             headerView.imageCollectionBarAddButton.isHidden = true
             headerView.layoutSubviews()
             headerView.layoutSublayers(of: .init())

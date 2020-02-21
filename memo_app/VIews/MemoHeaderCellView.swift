@@ -55,6 +55,7 @@ class MemoHeaderCellView: UICollectionReusableView {
         titleView.layer.cornerRadius = 10
         titleView.clipsToBounds = true
         titleView.tag = 0
+        titleView.isAccessibilityElement = true
         return titleView
     }()
     
@@ -80,6 +81,7 @@ class MemoHeaderCellView: UICollectionReusableView {
         textView.layer.cornerRadius = 10
         textView.clipsToBounds = true
         textView.tag = 1
+        textView.isAccessibilityElement = true
         return textView
     }()
     
@@ -122,6 +124,7 @@ class MemoHeaderCellView: UICollectionReusableView {
         button.setTitle("Add".localized(), for: .normal)
         button.isAccessibilityElement = true
         button.accessibilityHint = "Add image from Camera, Camera roll and Url".localized()
+        button.accessibilityLabel = "Add Image".localized()
         return button
     }()
     

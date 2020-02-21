@@ -63,7 +63,7 @@ class MemoPhotoItemCellView: UICollectionViewCell {
     
     let deleteButton: ButtonWithIndexPath = {
         let deleteButton = ButtonWithIndexPath()
-        deleteButton.setTitle("Delete".localized(), for: .normal)
+        deleteButton.setTitle("Image Delete".localized(), for: .normal)
         deleteButton.backgroundColor = .systemRed
         deleteButton.layer.cornerRadius = 10
         deleteButton.clipsToBounds = true

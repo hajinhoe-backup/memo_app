@@ -39,4 +39,9 @@
 "Downloading" = "내려받는 중";
 "Saving" = "저장 중";
 "Viewer" = "이미지 보기";
-
+"Add Image" = "이미지 추가";
+"Editable Text Input Form" = "수정가능한 내용 입력 폼";
+"Editable Title Input Form" = "수정가능한 제목 입력 폼";
+"Text Content" = "텍스트 내용";
+"Title" = "제목";
+"Image Delete" = "이미지 지우기";
