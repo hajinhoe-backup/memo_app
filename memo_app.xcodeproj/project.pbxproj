@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F3B246523FD28460054CB9F /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3B246423FD28460054CB9F /* SettingViewController.swift */; };
+		5F4A3E6823FE5897006CF021 /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4A3E6723FE5897006CF021 /* PhotoViewerViewController.swift */; };
+		5F4A3E6A23FE59AA006CF021 /* PhotoViewerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4A3E6923FE59AA006CF021 /* PhotoViewerCell.swift */; };
 		5F54207C23F2691400E69BAA /* MemoHeaderCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */; };
 		5F54208023F2F36100E69BAA /* MemoPhotoItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54207F23F2F36100E69BAA /* MemoPhotoItemCellView.swift */; };
 		5F58C82A23F6401200E2D3F0 /* ImageFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */; };
+		5F84DCFB23FEB7ED00AFDDF3 /* ImageEditTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F84DCFA23FEB7ED00AFDDF3 /* ImageEditTools.swift */; };
 		5F89FCAD23F6E45A00997AC6 /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */; };
 		5FAB777123F179810074A866 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB777023F179810074A866 /* AppDelegate.swift */; };
 		5FAB777323F179810074A866 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB777223F179810074A866 /* SceneDelegate.swift */; };
@@ -55,10 +59,15 @@
 		4F089462C4B3F5192928C351 /* Pods-memo_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_appTests.debug.xcconfig"; path = "Target Support Files/Pods-memo_appTests/Pods-memo_appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		50D34E3F17A51E94487CAA8B /* Pods-memo_app-memo_appUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memo_app-memo_appUITests.debug.xcconfig"; path = "Target Support Files/Pods-memo_app-memo_appUITests/Pods-memo_app-memo_appUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		58E755DFCA019371B5B32634 /* Pods_memo_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_memo_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F3B246423FD28460054CB9F /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		5F4A3E6723FE5897006CF021 /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
+		5F4A3E6923FE59AA006CF021 /* PhotoViewerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerCell.swift; sourceTree = "<group>"; };
 		5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoHeaderCellView.swift; sourceTree = "<group>"; };
 		5F54207F23F2F36100E69BAA /* MemoPhotoItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoPhotoItemCellView.swift; sourceTree = "<group>"; };
 		5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileManager.swift; sourceTree = "<group>"; };
 		5F715DBC23F7BC21004ACE93 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5F84DCFA23FEB7ED00AFDDF3 /* ImageEditTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditTools.swift; sourceTree = "<group>"; };
+		5F84DCFC23FFC7B800AFDDF3 /* wiki_images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = wiki_images; sourceTree = "<group>"; };
 		5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		5FAB776D23F179810074A866 /* memos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = memos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FAB777023F179810074A866 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				5F715DBC23F7BC21004ACE93 /* README.md */,
+				5F84DCFC23FFC7B800AFDDF3 /* wiki_images */,
 				5FAB776F23F179810074A866 /* memo_app */,
 				5FAB778623F179840074A866 /* memo_appTests */,
 				5FAB779123F179840074A866 /* memo_appUITests */,
@@ -209,6 +219,7 @@
 				5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */,
 				5FAB77AB23F180830074A866 /* RealmManager.swift */,
 				5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */,
+				5F84DCFA23FEB7ED00AFDDF3 /* ImageEditTools.swift */,
 				5FCFCF6D23F9273A00E06AEF /* StringExtension.swift */,
 			);
 			path = Services;
@@ -229,6 +240,7 @@
 				5FAB77AE23F1909A0074A866 /* MemoListCellView.swift */,
 				5F54207B23F2691400E69BAA /* MemoHeaderCellView.swift */,
 				5F54207F23F2F36100E69BAA /* MemoPhotoItemCellView.swift */,
+				5F4A3E6923FE59AA006CF021 /* PhotoViewerCell.swift */,
 			);
 			path = VIews;
 			sourceTree = "<group>";
@@ -238,6 +250,8 @@
 			children = (
 				5FAB77B023F19FE90074A866 /* MemoListViewController.swift */,
 				5FAB77B223F19FFD0074A866 /* MemoViewController.swift */,
+				5F4A3E6723FE5897006CF021 /* PhotoViewerViewController.swift */,
+				5F3B246423FD28460054CB9F /* SettingViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -486,16 +500,20 @@
 				5FAB777523F179810074A866 /* ViewController.swift in Sources */,
 				5FAB777123F179810074A866 /* AppDelegate.swift in Sources */,
 				5FCFCF6E23F9273A00E06AEF /* StringExtension.swift in Sources */,
+				5F3B246523FD28460054CB9F /* SettingViewController.swift in Sources */,
 				5FAB77B123F19FE90074A866 /* MemoListViewController.swift in Sources */,
 				5F54208023F2F36100E69BAA /* MemoPhotoItemCellView.swift in Sources */,
 				5FAB777323F179810074A866 /* SceneDelegate.swift in Sources */,
 				5FAB77AA23F180740074A866 /* HttpManager.swift in Sources */,
 				5F89FCAD23F6E45A00997AC6 /* ColorManager.swift in Sources */,
+				5F84DCFB23FEB7ED00AFDDF3 /* ImageEditTools.swift in Sources */,
 				5FAB77B323F19FFD0074A866 /* MemoViewController.swift in Sources */,
+				5F4A3E6823FE5897006CF021 /* PhotoViewerViewController.swift in Sources */,
 				5FAB77A523F180470074A866 /* Memo.swift in Sources */,
 				5FAB77AC23F180830074A866 /* RealmManager.swift in Sources */,
 				5F58C82A23F6401200E2D3F0 /* ImageFileManager.swift in Sources */,
 				5F54207C23F2691400E69BAA /* MemoHeaderCellView.swift in Sources */,
+				5F4A3E6A23FE59AA006CF021 /* PhotoViewerCell.swift in Sources */,
 				5FAB77AF23F1909A0074A866 /* MemoListCellView.swift in Sources */,
 				5FAB77A723F180540074A866 /* Photo.swift in Sources */,
 			);
@@ -731,7 +749,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/memo_app.app/memo_app";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/memos.app/memos";
 			};
 			name = Debug;
 		};
@@ -754,7 +772,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/memo_app.app/memo_app";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/memos.app/memos";
 			};
 			name = Release;
 		};
@@ -773,6 +791,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jinho.memo-appUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = memo_app;
@@ -794,6 +813,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jinho.memo-appUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = memo_app;

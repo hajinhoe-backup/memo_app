@@ -20,21 +20,35 @@ class MemoListCellView: UITableViewCell {
     var contentText = ""
     
     /* 최상위 스택 뷰 입니다 */
+    let rowStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
+    func setupRowStackView(_ stackView: UIStackView) {
+       stackView.translatesAutoresizingMaskIntoConstraints = false
+       
+       NSLayoutConstraint.activate([
+           stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+           stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+           stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+           stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0)
+       ])
+        
+        stackView.addArrangedSubview(cellBoxStackView)
+        setupCellBoxStackView(cellBoxStackView)
+    }
+    
     let cellBoxStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-       return stackView
+        return stackView
     }()
     
     func setupCellBoxStackView(_ cellBoxStackView: UIStackView) {
-        cellBoxStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            cellBoxStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            cellBoxStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            cellBoxStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            cellBoxStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
-        ])
+        cellBoxStackView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        cellBoxStackView.isLayoutMarginsRelativeArrangement = true
         
         cellBoxStackView.addArrangedSubview(imagePreView)
         setupimagePreView(imagePreView)
@@ -91,16 +105,16 @@ class MemoListCellView: UITableViewCell {
         cellContentPreviewView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            cellContentPreviewView.heightAnchor.constraint(equalToConstant: 70)
+            cellContentPreviewView.heightAnchor.constraint(equalToConstant: 80)
         ])
     }
     
     /* 화면 좌측에 보이는 프리뷰 이미지입니다. */
     let imagePreView: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.isAccessibilityElement = true
         imageView.accessibilityLabel = "User Memo First Photo Preview".localized()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
         return imageView
@@ -114,11 +128,18 @@ class MemoListCellView: UITableViewCell {
         ])
     }
     
+    // Edit 버튼 클릭 시 인덴테이션
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutMargins.left = CGFloat(1) * 50
+        contentView.layoutIfNeeded()
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.addSubview(cellBoxStackView)
-        setupCellBoxStackView(cellBoxStackView)
+        self.contentView.addSubview(rowStackView)
+        setupRowStackView(rowStackView)
     }
     
     required init?(coder: NSCoder) {

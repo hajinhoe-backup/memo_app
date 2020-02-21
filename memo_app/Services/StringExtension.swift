@@ -9,6 +9,7 @@
 import Foundation
 
 /* 현지화 편의를 위해 String 클래스에 추가 함수를 더합니다. */
+
 extension String {
     func localized(bundle: Bundle = .main, tableName: String = "Localizable") -> String
 {

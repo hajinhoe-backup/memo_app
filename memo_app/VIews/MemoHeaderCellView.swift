@@ -41,7 +41,7 @@ class MemoHeaderCellView: UICollectionReusableView {
     
     /* 스텍 뷰 하위의 타이틀 쓰는 곳 정의 및 설정 */
     let titleLabel: UILabel = {
-       let titleLabel = UILabel()
+        let titleLabel = UILabel()
         titleLabel.text = "Title".localized()
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         titleLabel.textColor = .gray

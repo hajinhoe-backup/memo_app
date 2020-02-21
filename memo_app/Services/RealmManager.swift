@@ -9,50 +9,51 @@
 import Foundation
 import RealmSwift
 
-
+/* Realm 이용을 위한 RealmManager 클래스를 정의합니다. */
 public class RealmManager {
+    /* 전역 림 객체를 반환합니다. */
     static var realm: Realm {
         get {
             do {
-                print("림 게터 1111111111")
-                
                 let realm = try Realm()
                 return realm
             } catch let error as NSError {
-                print("Could not access database: ", error) // need log error 패치 필요
-                
-                //일단 초기화 박아버리자
-                let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
-
-                let realmURLs = [
-                    realmURL,
-                    realmURL.appendingPathExtension("lock"),
-                    realmURL.appendingPathExtension("note"),
-                    realmURL.appendingPathExtension("management")
-
-                ]
-
-                for URL in realmURLs {
-                    do {
-                        try FileManager.default.removeItem(at: URL)
-                    } catch {
-                        // handle error
-                    }
-
-                }
+                initRealm()
+                print("Could not access database: ", error)
             }
-            print("림 게터 2222222")
             return self.realm
         }
     }
     
-    public static func write(realm: Realm, writeClosure: () -> ()) {
+    /* 클로저 안에서 림의 쓰기 작업을 합니다. */
+    static func write(realm: Realm, writeClosure: () -> ()) {
         do {
             try realm.write {
                 writeClosure()
             }
         } catch let error as NSError {
-                print("림 에러 기록", error)
+                print("Realm Write Error: ", error)
+        }
+    }
+    
+    /* Realm을 초기화 합니다. */
+    static func initRealm() {
+        let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
+
+        let realmURLs = [
+            realmURL,
+            realmURL.appendingPathExtension("lock"),
+            realmURL.appendingPathExtension("note"),
+            realmURL.appendingPathExtension("management")
+        ]
+
+        for URL in realmURLs {
+            do {
+                try FileManager.default.removeItem(at: URL)
+            } catch let error as NSError {
+                print("Error while init Realm: ", error)
+            }
+
         }
     }
 }

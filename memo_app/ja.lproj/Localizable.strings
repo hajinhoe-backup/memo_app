@@ -14,7 +14,7 @@
 "Images" = "イメージ";
 "Add image from Camera, Camera roll and Url" = "カメラ、カメラロール、URLからイメージ追加";
 "Added Image" = "追加されたイメージ";
-"Delete" = "消去";
+"Delete" = "削除";
 "Removes Image at Upside" = "上のイメージを消去";
 "There's no title" = "タイトル無し";
 "There's no content" = "内容無し";
@@ -32,3 +32,9 @@
 "Download" = "ダウンロード";
 "Input URL here" = "ここにURLを書いてください";
 "Now processing" = "プロセシング中";
+"Created" = "作成日";
+"Updated" = "修正日";
+"Nomber of Photo" = "写真の数";
+"Info" = "情報";
+"Downloading" = "ダウンロード中";
+"Saving" = "保存中";
