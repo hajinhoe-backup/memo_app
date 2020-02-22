@@ -149,7 +149,7 @@ extension MemoListViewController {
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(changeListEditMode))
         }
-
+        
     }
     
     /* 좌로 슬라이드 했을 때, 메모를 지우는 메소드 입니다.

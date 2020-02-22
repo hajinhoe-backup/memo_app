@@ -44,11 +44,6 @@ class memo_appTests: XCTestCase {
         
         RealmManager.initRealm()
     }
-
-    func testDownloadImage() {
-        // HTTP 매니저의 다운로드 기능을 테스트합니다.
-        
-    }
     
     /* Photo 50개를 한 번에 저장하는 테스트입니다. */
     func testPhotoSave50atOnece() {

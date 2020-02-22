@@ -472,7 +472,7 @@ extension MemoViewContoller {
                 self.changeRightNavigationItemToViewMode()
             }
         }
-
+        
     }
     
     
@@ -599,10 +599,6 @@ extension MemoViewContoller {
             }
         }
         
-      //  let idValue = String(savedPhotoIdMax + 1 + index)
-        
-      //  self.cachedImages.setObject(image, forKey: idValue as NSString)
-        
         DispatchQueue.global().async {
             guard let resizedImage = self.imageEditTools.resizeImage(image: image, toWidth: 400) else {
                 print("Image resizing fail!")
@@ -616,7 +612,6 @@ extension MemoViewContoller {
             
             self.thumbnailImageSaveQueue.async {
                 self.thumbnailTemporaryImages[index] = thumbnailImage
-              //  self.cachedImages.setObject(thumbnailImage, forKey: idValue as NSString)
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -642,8 +637,6 @@ extension MemoViewContoller {
                         self.imagesIndex.remove(at: willDeleteIndexValue)
                     }
                     
-                 //   idValue = String(savedPhotoIdMax + 1 + removeImageIndex)
-                    
                     thumbnailImageSaveQueue.async { // resizedImage는 해당 큐에서 관리되어야 합니다.
                         // 결과를 바로 이용할 필요가 없습니다.
                         self.thumbnailTemporaryImages.removeValue(forKey: removeImageIndex)
@@ -653,8 +646,6 @@ extension MemoViewContoller {
                     savedPhotoCount -= 1
                     cachedImages.removeObject(forKey: idValue as NSString)
                 }
-                
-        //        cachedImages.removeObject(forKey: idValue as NSString)
                 
                 collectionView.reloadData()
             }
@@ -818,26 +809,26 @@ extension MemoViewContoller {
             // url로 부터 이미지 요청
             self.showWatingAlert(title: "Downloading".localized(), height: 150) { alert in
                 let task = self.httpManager.getImage(from: url, complition: { dataImage , error in
-                        //에러가 존재합니다.
-                        if let error = error as NSError? {
-                            //사용자가 임의로 작업을 취소하였습니다. 더 이상 진행하지 않습니다.
-                            if error.code == NSURLErrorCancelled {
-                                return
-                            }
+                    //에러가 존재합니다.
+                    if let error = error as NSError? {
+                        //사용자가 임의로 작업을 취소하였습니다. 더 이상 진행하지 않습니다.
+                        if error.code == NSURLErrorCancelled {
+                            return
                         }
-                        // 완료된 작업
-                        DispatchQueue.main.async {
-                            alert.dismiss(animated: true, completion: {
-                                self.saveDownloadedImage(downloadedImage: dataImage)
-                            })
-                        }
-                    })
-                    
-                    // 취소 액션을 경고창에 포함합니다.
-                    let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: { _ in task.cancel() } )
-                    alert.addAction(cancelButton)
-                }
+                    }
+                    // 완료된 작업
+                    DispatchQueue.main.async {
+                        alert.dismiss(animated: true, completion: {
+                            self.saveDownloadedImage(downloadedImage: dataImage)
+                        })
+                    }
+                })
+                
+                // 취소 액션을 경고창에 포함합니다.
+                let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: { _ in task.cancel() } )
+                alert.addAction(cancelButton)
             }
+        }
     }
     
     func downloadAlert() {

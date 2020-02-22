@@ -18,7 +18,6 @@ public class RealmManager {
                 let realm = try Realm()
                 return realm
             } catch let error as NSError {
-                initRealm()
                 print("Could not access database: ", error)
             }
             return self.realm

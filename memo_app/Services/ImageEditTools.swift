@@ -40,7 +40,6 @@ class ImageEditTools {
     
     func uiimageToFileData(image: UIImage?) throws -> Data {
         guard let image = image, let data = image.pngData() ?? image.jpegData(compressionQuality: 1) else {
-            print("유아이이미지투파일데이타")
             throw ImageEditToolsError.convertError
         }
         
