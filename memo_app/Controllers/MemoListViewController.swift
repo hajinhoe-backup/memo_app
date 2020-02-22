@@ -15,7 +15,7 @@ import UIKit
 
 class MemoListViewController: UITableViewController {
     /* 좌측 이미지 프리뷰에 쓰이는 캐시를 정의합니다. */
-    let imagePreviewCache = NSCache<NSString, UIImage>()
+    let imagePreviewCache = ImageCacheManager.manager.thumnailCache
     
     /* 이미지 데이터를 불러오는 매니저를 생성합니다. */
     let imageFileManager = ImageFileManager()

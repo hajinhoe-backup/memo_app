@@ -28,6 +28,7 @@
 		5FAB77AF23F1909A0074A866 /* MemoListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB77AE23F1909A0074A866 /* MemoListCellView.swift */; };
 		5FAB77B123F19FE90074A866 /* MemoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB77B023F19FE90074A866 /* MemoListViewController.swift */; };
 		5FAB77B323F19FFD0074A866 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAB77B223F19FFD0074A866 /* MemoViewController.swift */; };
+		5FC93429240124DF004B0241 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC93428240124DF004B0241 /* ImageCacheManager.swift */; };
 		5FCFCF6623F9269200E06AEF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FCFCF6823F9269200E06AEF /* Localizable.strings */; };
 		5FCFCF6E23F9273A00E06AEF /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCFCF6D23F9273A00E06AEF /* StringExtension.swift */; };
 		7E2843569E0ED479C02A22EB /* Pods_memo_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E755DFCA019371B5B32634 /* Pods_memo_app.framework */; };
@@ -87,6 +88,7 @@
 		5FAB77AE23F1909A0074A866 /* MemoListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListCellView.swift; sourceTree = "<group>"; };
 		5FAB77B023F19FE90074A866 /* MemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListViewController.swift; sourceTree = "<group>"; };
 		5FAB77B223F19FFD0074A866 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
+		5FC93428240124DF004B0241 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		5FCFCF6723F9269200E06AEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5FCFCF6923F926BC00E06AEF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5FCFCF6A23F926BC00E06AEF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				5FAB77A923F180740074A866 /* HttpManager.swift */,
 				5F89FCAC23F6E45A00997AC6 /* ColorManager.swift */,
 				5FAB77AB23F180830074A866 /* RealmManager.swift */,
+				5FC93428240124DF004B0241 /* ImageCacheManager.swift */,
 				5F58C82923F6401200E2D3F0 /* ImageFileManager.swift */,
 				5F84DCFA23FEB7ED00AFDDF3 /* ImageEditTools.swift */,
 				5FCFCF6D23F9273A00E06AEF /* StringExtension.swift */,
@@ -508,6 +511,7 @@
 				5FAB77A523F180470074A866 /* Memo.swift in Sources */,
 				5FAB77AC23F180830074A866 /* RealmManager.swift in Sources */,
 				5F58C82A23F6401200E2D3F0 /* ImageFileManager.swift in Sources */,
+				5FC93429240124DF004B0241 /* ImageCacheManager.swift in Sources */,
 				5F54207C23F2691400E69BAA /* MemoHeaderCellView.swift in Sources */,
 				5F4A3E6A23FE59AA006CF021 /* PhotoViewerCell.swift in Sources */,
 				5FAB77AF23F1909A0074A866 /* MemoListCellView.swift in Sources */,

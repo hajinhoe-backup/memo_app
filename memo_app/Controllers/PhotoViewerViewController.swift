@@ -12,7 +12,8 @@
 import UIKit
 
 class PhotoViewerViewController: UICollectionViewController {
-    var cachedImages = NSCache<NSString, UIImage>() // NSCache는 스레드 세이프 함.
+    let thumbnailCache = ImageCacheManager.manager.thumnailCache // 썸네일 캐시
+    let originalCache = ImageCacheManager.manager.originalCache // 오리지날 캐시
     
     var photos: [Photo] = []
     
@@ -22,30 +23,40 @@ class PhotoViewerViewController: UICollectionViewController {
     
     func getPhotoViewerViewCache(indexPath: IndexPath) -> UIImage? {
         if indexPath.item < photos.count { // 영원하게 저장되어 있는 경우
-            let idValue = String(photos[indexPath.item].id)
+            let url = photos[indexPath.item].url
             
-            if let cachedImage = cachedImages.object(forKey: idValue as NSString) { // 캐시에 저장되어 있음
+            if let cachedImage = originalCache.object(forKey: url as NSString) { // 원본 이미지 캐시에 저장됨.
                 return cachedImage
             }
             
-            // 캐시되어 있지 않은 경우 이미지를 가져온다.
-            // 크기가 작은 썸네일을 먼저 가져온다.
-            let url = photos[indexPath.item].url
-            if let cachedImage = self.imageFileManager.getSavedImage(named: url, directory: .thumbnail) {
-                DispatchQueue.global().async {
-                    //고화질 이미지를 가져온다.
-                    if let originalImage = self.imageFileManager.getSavedImage(named: url, directory: .original) {
-                        self.cachedImages.setObject(originalImage, forKey: idValue as NSString)
-                        DispatchQueue.main.async {
-                            //고화질 이미지를 가져온 후 업데이트 한다.
-                            self.collectionView.reloadData()
-                        }
+            // 원본 이미지 없는 경우 다른 쓰레드에서 오리지날 이미지 가져옴.
+            DispatchQueue.global().async {
+                //고화질 이미지를 가져온다.
+                if let originalImage = self.imageFileManager.getSavedImage(named: url, directory: .original) {
+                    self.originalCache.setObject(originalImage, forKey: url as NSString)
+                    DispatchQueue.main.async {
+                        //고화질 이미지를 가져온 후 업데이트 한다.
+                        self.collectionView.reloadData()
                     }
                 }
+            }
+            
+            // 썸네일 캐시 요청
+            if let cachedImage = thumbnailCache.object(forKey: url as NSString) { // 원본 이미지 캐시에 저장됨.
                 return cachedImage
             }
+            
+            // 썸네일 캐시도 없는 경우 요청 후 디스패치 큐로 썸네일 저장하고 바로 반환
+            if let thumbnailImage = self.imageFileManager.getSavedImage(named: url, directory: .thumbnail) {
+                DispatchQueue.global().async {
+                    self.thumbnailCache.setObject(thumbnailImage, forKey: url as NSString)
+                }
+                return thumbnailImage
+            }
         }
-        return nil
+        
+        // 데이터를 찾을 수 없는 경우
+        return UIImage(imageLiteralResourceName: "imageError") // 이미지 없음 표시
     }
     
     func setupLayout() {
@@ -87,7 +98,8 @@ class PhotoViewerViewController: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.navigationController?.hidesBarsOnTap = true //allow hiding bar
+        navigationController?.hidesBarsOnTap = true //allow hiding bar
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         collectionView.reloadData()
         collectionView.scrollToItem(at: photoOffset, at: .left , animated: false)
     }
@@ -95,6 +107,7 @@ class PhotoViewerViewController: UICollectionViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.hidesBarsOnTap = false
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

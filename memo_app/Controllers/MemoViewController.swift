@@ -44,7 +44,8 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
     
     /* 이미지의 값이 실제로 영구 저장소에 올라가있지 않을 수 있습니다.
      Save 될 때만, 저장되지 않은 이미지가 올라갑니다. */
-    var cachedImages = NSCache<NSString, UIImage>() // NSCache는 스레드 세이프 함.
+    let thumbnailCache = ImageCacheManager.manager.thumnailCache // NSCache는 스레드 세이프 함.
+    let originalCache = ImageCacheManager.manager.originalCache // 오리지날 캐시
     var thumbnailTemporaryImages = [Int : UIImage]()
     var imagesIndex = [Int]() // 저장되지 않은 이미지의 인덱스를 매칭합니다.
     
@@ -214,7 +215,7 @@ class MemoViewContoller: UICollectionViewController, UICollectionViewDelegateFlo
         
         // 재 사용을 위한 데이터 제거
         photos.removeAll()
-        cachedImages.removeAllObjects()
+        thumbnailCache.removeAllObjects()
         thumbnailTemporaryImages.removeAll()
         imagesIndex.removeAll()
     }
@@ -360,14 +361,14 @@ extension MemoViewContoller {
         if indexPath.item < savedPhotoCount { // 영원하게 저장되어 있는 경우
             let idValue = String(photos[indexPath.item].id)
             
-            if let cachedImage = cachedImages.object(forKey: idValue as NSString) { // 캐시에 저장되어 있음
+            if let cachedImage = thumbnailCache.object(forKey: idValue as NSString) { // 캐시에 저장되어 있음
                 return cachedImage
             }
             
             let url = photos[indexPath.item].url
             if let cachedImage = self.imageFileManager.getSavedImage(named: url, directory: .thumbnail) {
                 DispatchQueue.global().async {
-                    self.cachedImages.setObject(cachedImage, forKey: idValue as NSString)
+                    self.thumbnailCache.setObject(cachedImage, forKey: idValue as NSString)
                 }
                 return cachedImage
             }
@@ -465,14 +466,12 @@ extension MemoViewContoller {
         self.showWatingAlert(title: "Saving".localized(), height: 100) { alert in
             // 알럿이 표시된 후 저장합니다.
             self.savePhotosPermanently()
+            // 레이아웃을 갱신합니다.
+            self.layoutToViewMode()
+            self.changeRightNavigationItemToViewMode()
             // 저장이 끝나 알럿을 지웁니다.
-            alert.dismiss(animated: true) {
-                // 알럿을 지운 후 레이아웃을 갱신합니다.
-                self.layoutToViewMode()
-                self.changeRightNavigationItemToViewMode()
-            }
+            alert.dismiss(animated: true, completion: nil)
         }
-        
     }
     
     
@@ -537,7 +536,6 @@ extension MemoViewContoller {
         let verticalContraint = alert.view.heightAnchor.constraint(equalToConstant: height)
         verticalContraint.isActive = true
         
-        // To do: indicator 위치가 맘에 안 듦.
         let indicator = UIActivityIndicatorView(frame: alert.view.bounds)
         indicator.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
@@ -546,8 +544,6 @@ extension MemoViewContoller {
         indicator.startAnimating()
         
         present(alert, animated: true, completion: { complition(alert) })
-        
-        //return alert
     }
 }
 
@@ -565,6 +561,7 @@ extension MemoViewContoller {
             RealmManager.realm.add(memo)
         }
         
+        
         if isFirstWrite { isFirstWrite = false }
     }
     
@@ -575,25 +572,29 @@ extension MemoViewContoller {
             memo.content = contentText
             memo.editDate = Date()
         }
+        
     }
     
     /* 메모 이미지 데이터 처리와 연관된 메소드입니다. */
     /* 아래의 메소드는 컨트롤러에 메모리를 임시로 합니다.
      사용자가 Done 버튼을 누르지 않으면 내용은 영구적으로는 반영되지 않습니다.*/
     /* 오리지날 이미지는 메모리에 올리기엔 너무 클 수 있으므로,
-     temporary filefh 먼저 영구 저장한 다음 처리합니다.*/
+     temporary directory에 먼저 영구 저장한 다음 처리합니다.*/
     func savePhotoTemporary(image: UIImage) {
-        photos.append(Photo())
-        
-        let index = (imagesIndex.last ?? -1) + 1
+        let index = (imagesIndex.last ?? savedPhotoIdMax) + 1
         imagesIndex.append(index)
+        
+        let photo = Photo()
+        photo.id = index
+        photo.url = String(photo.id)
+        photos.append(photo)
         
         // 오리지날 이미지를 임시 저장합니다.
         originalImageSaveQueue.async {
             do {
                 let rotatedImage = self.imageEditTools.rotateImage(image: image)
                 let imageData = try self.imageEditTools.uiimageToFileData(image: rotatedImage)
-                try self.imageFileManager.saveImage(imageName: String(index), imageData: imageData, directory: .originalTemporary)
+                try self.imageFileManager.saveImage(imageName: photo.url, imageData: imageData, directory: .originalTemporary)
             } catch {
                 print(error)
             }
@@ -628,23 +629,26 @@ extension MemoViewContoller {
                 photos.remove(at: index)
                 
                 if savedPhotoCount <= index { // 영구 메모리에 저장되지 않은 경우
-                    print("delete not permanent \(index)")
                     let removeImageIndex = imagesIndex[index - savedPhotoCount]
                     
                     //이미지 인덱스를 리사이즈드 이미지 세이브 큐 안에서 삭제하지 않으면 참조 오류가 발생할 수 있습니다. (순서 문제 발생 가능)
                     let willDeleteIndexValue = index - savedPhotoCount
-                    thumbnailImageSaveQueue.async {
-                        self.imagesIndex.remove(at: willDeleteIndexValue)
+                    originalImageSaveQueue.async {
+                        do {
+                            try self.imageFileManager.deleteImage(imageName: String(removeImageIndex), directory: .originalTemporary)
+                        } catch {
+                            print(error)
+                        }
                     }
                     
                     thumbnailImageSaveQueue.async { // resizedImage는 해당 큐에서 관리되어야 합니다.
+                        self.imagesIndex.remove(at: willDeleteIndexValue)
                         // 결과를 바로 이용할 필요가 없습니다.
                         self.thumbnailTemporaryImages.removeValue(forKey: removeImageIndex)
                     }
                 } else { // 영구 메모리에 저장된 경우
-                    print("delete permanent \(index)")
                     savedPhotoCount -= 1
-                    cachedImages.removeObject(forKey: idValue as NSString)
+                    thumbnailCache.removeObject(forKey: idValue as NSString)
                 }
                 
                 collectionView.reloadData()
@@ -657,17 +661,16 @@ extension MemoViewContoller {
      사용자가 Done 버튼을 누르면 반드시 호출되어야 하는 메소드입니다.
      해당 함수의 시간 복잡도는 최대 O(임시 카운트 + 영구 저장 사진 카운트)이므로 선형의 복잡도를 가집니다.
      */
-    func savePhotosPermanently() {
-        var temporaryCount = 0 // temporary 이미지에 대한 인덱스입니다.
-        var permanentlyCount = 0 // 영구 저장 이미지에 대한 인덱스입니다.
+    func savePhotosPermanently() { // 알고리즘 문제 있는 듯.
+        var nowPhotosIndex = 0 // 현재 저장(보존)할 이미지들에 대한 인덱스
+        var prePhotosIndex = 0 // 이미 저장된 이미지에 대한 인덱스
         
         thumbnailImageSaveQueue.sync { } // 이미지 리사이징이 끝날 때 까지 대기합니다.
         originalImageSaveQueue.sync { } // 오리지날 이미지 저장이 끝날 때 까지 대기합니다.
-        
-        while temporaryCount < photos.count || permanentlyCount < memo.photos.count {
-            if temporaryCount == photos.count {
+        while nowPhotosIndex < photos.count || prePhotosIndex < memo.photos.count {
+            if nowPhotosIndex == photos.count { // 남은 원래 저장되어 있던 이미지는 지워져야 합니다.
                 // 뒤에 있는 이미지를 모두 지웁니다.
-                let deleteAmount = memo.photos.count - permanentlyCount
+                let deleteAmount = memo.photos.count - prePhotosIndex
                 for _ in (0..<deleteAmount) {
                     let imageUrl = memo.photos[memo.photos.count - 1].url
                     RealmManager.write(realm: RealmManager.realm) {
@@ -680,47 +683,50 @@ extension MemoViewContoller {
                     } catch {
                         print(error)
                     }
+                    self.originalCache.removeObject(forKey: imageUrl as NSString) // 캐시에서 제거함.
                 }
                 break
             }
-            if permanentlyCount == memo.photos.count || photos[temporaryCount].id == -1 {
+            
+            if prePhotosIndex == memo.photos.count {
                 // 뒤에 있는 이미지를 모조리 추가합니다.
-                let baseId = (RealmManager.realm.objects(Photo.self).max(ofProperty: "id") as Int? ?? -1) + 1 - temporaryCount
+                //let baseId = savedPhotoIdMax + 1 - nowPhotosIndex
+                let base = (RealmManager.realm.objects(Photo.self).max(ofProperty: "id") as Int? ?? -1) - savedPhotoIdMax // 실 저장은 중복을 피하도록 데이터베이스의 맥스 id값을 이용합니다.
                 
-                while temporaryCount < photos.count {
-                    photos[temporaryCount].id = baseId + temporaryCount
-                    photos[temporaryCount].url = String(baseId + temporaryCount)
+                while nowPhotosIndex < photos.count {
+                    photos[nowPhotosIndex].id += base
+                    photos[nowPhotosIndex].url = String(photos[nowPhotosIndex].id)
                     
                     RealmManager.write(realm: RealmManager.realm) {
-                        memo.photos.append(photos[temporaryCount])
+                        memo.photos.append(photos[nowPhotosIndex])
                     }
                     
-                    if let image = self.thumbnailTemporaryImages[imagesIndex[temporaryCount - self.savedPhotoCount]] {
+                    if let image = self.thumbnailTemporaryImages[imagesIndex[nowPhotosIndex - self.savedPhotoCount]] {
                         do {
                             //썸네일을 저장합니다.
                             if let imageData = try? imageEditTools.uiimageToFileData(image: image) {
-                                try self.imageFileManager.saveImage(imageName: photos[temporaryCount].url, imageData: imageData, directory: .thumbnail)
+                                try self.imageFileManager.saveImage(imageName: photos[nowPhotosIndex].url, imageData: imageData, directory: .thumbnail)
                             }
                             // 임시 저장 오리지날 이미지를 영구저장 폴더로 옮깁니다.
-                            try self.imageFileManager.moveFromTo(from: .originalTemporary, fromImageName: String(imagesIndex[temporaryCount - self.savedPhotoCount]), to: .original, toImageName: photos[temporaryCount].url)
+                            try self.imageFileManager.moveFromTo(from: .originalTemporary, fromImageName: String(imagesIndex[nowPhotosIndex - self.savedPhotoCount]), to: .original, toImageName: photos[nowPhotosIndex].url)
                         } catch {
                             print(error)
                         }
                     }
                     
-                    temporaryCount += 1
+                    nowPhotosIndex += 1
                 }
                 break
             }
             
-            if photos[temporaryCount].id == memo.photos[permanentlyCount].id {
-                temporaryCount += 1
-                permanentlyCount += 1
-            } else if photos[temporaryCount].id > memo.photos[permanentlyCount].id {
+            if photos[nowPhotosIndex].id == memo.photos[prePhotosIndex].id {
+                nowPhotosIndex += 1
+                prePhotosIndex += 1
+            } else if photos[nowPhotosIndex].id > memo.photos[prePhotosIndex].id {
                 // 이미지를 지워야 합니다.
-                let imageUrl = memo.photos[permanentlyCount].url
+                let imageUrl = memo.photos[prePhotosIndex].url
                 RealmManager.write(realm: RealmManager.realm) {
-                    RealmManager.realm.delete(memo.photos.filter("id == %@", memo.photos[permanentlyCount].id))
+                    RealmManager.realm.delete(memo.photos.filter("id == %@", memo.photos[prePhotosIndex].id))
                 }
                 do {
                     try imageFileManager.deleteImage(imageName: imageUrl, directory: .original)
@@ -728,10 +734,13 @@ extension MemoViewContoller {
                 } catch {
                     print(error)
                 }
+                self.originalCache.removeObject(forKey: imageUrl as NSString) // 캐시에서 제거함.
             } else {
                 // 항상 id가 단조증가 하므로 일어날 수 없는 동작입니다.
                 print("Error occurd reflecting Photo!")
             }
+            
+            
         }
         
         // 저장 완료 후, 임시 디렉토리 클리어 작업 및 인덱스 조정 등을 실시합니다.
@@ -757,13 +766,10 @@ extension MemoViewContoller {
                 print(error)
             }
         }
-        
         RealmManager.write(realm: RealmManager.realm) {
             RealmManager.realm.delete(memo.photos)
             RealmManager.realm.delete(memo)
         }
-        
-        dismissView()
     }
 }
 
@@ -776,58 +782,49 @@ extension MemoViewContoller {
         if let image = downloadedImage {
             savePhotoTemporary(image: image)
         } else {
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Error".localized(), message: "Not a Image".localized(), preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "OK".localized(), style: .cancel, handler: nil)
-                
-                alert.addAction(cancelAction)
-                
-                self.present(alert, animated: true, completion: nil)
-            }
+            let alert = UIAlertController(title: "Error".localized(), message: "Not a Image".localized(), preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "OK".localized(), style: .cancel, handler: nil)
+            
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     func downloadFromUrl(userUrl: String?) {
         //url 변환 및 url이 잘 못 되었을 경우 알려주고 종료
         guard let string = userUrl, let url = httpManager.stringToUrl(from: string) else {
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Error".localized(), message: "Incollect URL".localized(), preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "OK".localized(), style: .cancel, handler: nil)
-                
-                alert.addAction(cancelAction)
-                
-                self.present(alert, animated: true, completion: nil)
-            }
+            let alert = UIAlertController(title: "Error".localized(), message: "Incollect URL".localized(), preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "OK".localized(), style: .cancel, handler: nil)
             
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true, completion: nil)
             return
         }
         
         // 기다리는 동안 대기 alert을 호출합니다.
-        DispatchQueue.main.async {
-            // 이미지가 작을 경우 httpManager.getImage안의 클로저가 먼저 호출될 수 있으므로,
-            // main에서 순차적으로 호출합니다.
-            // url로 부터 이미지 요청
-            self.showWatingAlert(title: "Downloading".localized(), height: 150) { alert in
-                let task = self.httpManager.getImage(from: url, complition: { dataImage , error in
-                    //에러가 존재합니다.
-                    if let error = error as NSError? {
-                        //사용자가 임의로 작업을 취소하였습니다. 더 이상 진행하지 않습니다.
-                        if error.code == NSURLErrorCancelled {
-                            return
-                        }
+        // url로 부터 이미지 요청
+        self.showWatingAlert(title: "Downloading".localized(), height: 150) { alert in
+            let task = self.httpManager.getImage(from: url, complition: { dataImage , error in
+                //에러가 존재합니다.
+                if let error = error as NSError? {
+                    //사용자가 임의로 작업을 취소하였습니다. 더 이상 진행하지 않습니다.
+                    if error.code == NSURLErrorCancelled {
+                        return
                     }
-                    // 완료된 작업
-                    DispatchQueue.main.async {
-                        alert.dismiss(animated: true, completion: {
-                            self.saveDownloadedImage(downloadedImage: dataImage)
-                        })
-                    }
-                })
-                
-                // 취소 액션을 경고창에 포함합니다.
-                let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: { _ in task.cancel() } )
-                alert.addAction(cancelButton)
-            }
+                }
+                // 완료된 작업
+                DispatchQueue.main.async {
+                    alert.dismiss(animated: true, completion: {
+                        self.saveDownloadedImage(downloadedImage: dataImage)
+                    })
+                }
+            })
+            
+            // 취소 액션을 경고창에 포함합니다.
+            let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: { _ in task.cancel() } )
+            alert.addAction(cancelButton)
         }
     }
     
