@@ -67,6 +67,10 @@ class MemoListViewController: UITableViewController {
         tableView.reloadData()
         
         memoViewController.needInitialize = true
+        
+        if tableView.isEditing {
+            changeListEditMode()
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

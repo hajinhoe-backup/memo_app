@@ -43,7 +43,6 @@ class MemoPhotoItemCellView: UICollectionViewCell {
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "broken") // 임시 이미지, 실패 이미지이기도 함.
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
         imageView.layer.cornerRadius = 10

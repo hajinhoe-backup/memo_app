@@ -21,8 +21,9 @@ class PhotoViewerCell: UICollectionViewCell, UIScrollViewDelegate {
         self.imageScrollView.delegate = self
         self.imageScrollView.alwaysBounceVertical = false
         self.imageScrollView.alwaysBounceHorizontal = false
-        self.imageScrollView.showsVerticalScrollIndicator = true
-        self.imageScrollView.flashScrollIndicators()
+        
+        self.imageScrollView.showsHorizontalScrollIndicator = false
+        self.imageScrollView.showsVerticalScrollIndicator = false
         
         self.imageScrollView.minimumZoomScale = 1.0
         self.imageScrollView.maximumZoomScale = 3.0
@@ -46,7 +47,6 @@ class PhotoViewerCell: UICollectionViewCell, UIScrollViewDelegate {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.imageScrollView.setZoomScale(1, animated: true)
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

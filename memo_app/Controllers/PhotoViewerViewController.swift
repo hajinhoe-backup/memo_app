@@ -6,10 +6,12 @@
 //  Copyright © 2020 jinho. All rights reserved.
 //
 
+/* 이미지 뷰어입니다. */
+/* 핀치 투 줌, 넘겨 집기 등이 가능합니다. */
+/* 트랜지션일 때, 처리를 최대한 해보았는데, 기본 사진 어플리케이션 만큼 스무스 하지는 못 합니다. 조금 더 기교가 필요할 듯. */
 import UIKit
 
 class PhotoViewerViewController: UICollectionViewController {
-    // 캐시를 전역 싱글톤으로 쓰는게 좋을 듯?
     var cachedImages = NSCache<NSString, UIImage>() // NSCache는 스레드 세이프 함.
     
     var photos: [Photo] = []
@@ -83,7 +85,6 @@ class PhotoViewerViewController: UICollectionViewController {
         automaticallyAdjustsScrollViewInsets = false
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.hidesBarsOnTap = true //allow hiding bar
@@ -96,19 +97,28 @@ class PhotoViewerViewController: UICollectionViewController {
         navigationController?.hidesBarsOnTap = false
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return navigationController?.isNavigationBarHidden == true
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        let offset = photoOffset
+        
+        coordinator.animate(alongsideTransition: .none) { _ in
+            if let layout = self.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.itemSize = size
+                if let cell = self.collectionView.cellForItem(at: offset) as? PhotoViewerCell {
+                    cell.imageScrollView.frame = self.collectionView.bounds
+                    cell.imageView.frame = self.collectionView.bounds
+                    cell.imageScrollView.setZoomScale(1.0, animated: true)
+                }
+                self.collectionView.selectItem(at: offset, animated: false, scrollPosition: .left)
+                layout.invalidateLayout()
+            }
+        }
     }
     
-    
-    @objc func dismissView() {
-        navigationController?.popViewController(animated: true)
-        self.navigationController?.hidesBarsOnTap = false //allow hiding bar
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return self.view.bounds.size
     }
-}
-
-
-extension PhotoViewerViewController {
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
     }
@@ -120,5 +130,28 @@ extension PhotoViewerViewController {
         cell.imageView.image = getPhotoViewerViewCache(indexPath: indexPath)
         
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let willDisplayCell = cell as! PhotoViewerCell
+        willDisplayCell.imageScrollView.setZoomScale(1.0, animated: false)
+    }
+}
+
+
+extension PhotoViewerViewController {
+    override var prefersStatusBarHidden: Bool {
+        return navigationController?.isNavigationBarHidden == true
+    }
+    
+    @objc func dismissView() {
+        navigationController?.popViewController(animated: true)
+        self.navigationController?.hidesBarsOnTap = false //allow hiding bar
+    }
+    
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            photoOffset = indexPath
+        }
     }
 }

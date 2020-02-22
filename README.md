@@ -3,5 +3,4 @@
 https://github.com/hajinhoe/memo_app/wiki/README
 
 # To do
-## 보이스 오버 점검
 ## 버그 검출
