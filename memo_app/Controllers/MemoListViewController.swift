@@ -58,11 +58,8 @@ class MemoListViewController: UITableViewController {
         /* 데이터를 갱신합니다. */
         memos.removeAll(keepingCapacity: true)
         
-        let datas = RealmManager.realm.objects(Memo.self)
-        
-        for idx in (0..<datas.count) {
-            memos.append(datas[datas.count - idx - 1])
-        }
+        // Edit Date가 최근인 순으로 보여줍니다.
+        memos = RealmManager.realm.objects(Memo.self).sorted(byKeyPath: "editDate", ascending: false).map{ $0 }
         
         tableView.reloadData()
         
@@ -162,6 +159,9 @@ extension MemoListViewController {
             } catch {
                 print(error)
             }
+            // 캐시 제거
+            ImageCacheManager.manager.originalCache.removeObject(forKey: photo.url as NSString)
+            ImageCacheManager.manager.thumnailCache.removeObject(forKey: photo.url as NSString)
         }
         
         RealmManager.write(realm: RealmManager.realm) {

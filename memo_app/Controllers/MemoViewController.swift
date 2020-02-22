@@ -757,6 +757,8 @@ extension MemoViewContoller {
     
     /* delete 버튼을 클릭 했을 때, 메모의 모든 사진을 순회하여 삭제하고,
      메모 자체를 삭제한 후, 리스트 뷰로 되돌아 갑니다. */
+    /* 리스트 뷰와 기능 상 중복이 되는데, MVVM이면, VM로 빼버리면 되겠지만,
+     MVC로 하고 있는데, 어디가 더 적당할지 고민됨. 일단 중복된 모양새가 됨. */
     func deleteMemo() {
         for photo in memo.photos {
             do {
@@ -765,6 +767,9 @@ extension MemoViewContoller {
             } catch {
                 print(error)
             }
+            // 캐시 제거
+            ImageCacheManager.manager.originalCache.removeObject(forKey: photo.url as NSString)
+            ImageCacheManager.manager.thumnailCache.removeObject(forKey: photo.url as NSString)
         }
         RealmManager.write(realm: RealmManager.realm) {
             RealmManager.realm.delete(memo.photos)
