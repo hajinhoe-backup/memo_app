@@ -30,7 +30,7 @@ class PhotoViewerViewController: UICollectionViewController {
             }
             
             // 원본 이미지 없는 경우 다른 쓰레드에서 오리지날 이미지 가져옴.
-            DispatchQueue.global().async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 //고화질 이미지를 가져온다.
                 if let originalImage = self.imageFileManager.getSavedImage(named: url, directory: .original) {
                     self.originalCache.setObject(originalImage, forKey: url as NSString)
